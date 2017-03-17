@@ -61,15 +61,16 @@ class ResultController extends Controller
                 }
 
                 foreach ($answer as $key => $value) {
+                    //  Set default email and name if user not login or don't have setting require email, name or both.
                     if (!auth()->check() && !$request->get('name-answer') && !$request->get('email-answer')) {
-                        $setName = trans('result.no_name');
-                        $setEmail = '';
+                        $setName = config('settings.name_unidentified');
+                        $setEmail = config('settings.email_unidentified');
                     } else {
                         $setName = $request->get('name-answer') ?: (
-                            auth()->check() ? auth()->user()->name : trans('result.no_name')
+                            auth()->check() ? auth()->user()->name : config('settings.name_unidentified')
                         );
                         $setEmail = $request->get('email-answer') ?: (
-                            auth()->check() ? auth()->user()->email: trans('result.no_email')
+                            auth()->check() ? auth()->user()->email: config('settings.email_unidentified')
                         );
                     }
 

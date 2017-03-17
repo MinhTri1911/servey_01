@@ -2,15 +2,12 @@
 
 return [
     'image_system' => '/library/images/',
+    'image_user_default' => 'user/images/default_user.png',
     'image_default' => 'questionDefault.png',
     'image_path' => 'image/',
     'image_question_path' => '/user/uploads/question/',
     'image_answer_path' => '/user/uploads/answer/',
     'image_path_system' => 'user/images/',
-    'survey' => [
-        'not_feature' => '0',
-        'feature' => '1',
-    ],
     'question' => [
         'not_required' => 0,
         'required' => 1,
@@ -76,4 +73,6 @@ return [
         4,
         5,
     ],
+    'email_unidentified' => 0,
+    'name_unidentified' => 1,
 ];

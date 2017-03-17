@@ -134,10 +134,14 @@ class QuestionRepository extends BaseRepository implements QuestionInterface
         return $this->where('survey_id', $surveyId)->lists('id')->toArray();
     }
 
-    public function getResultByQuestionIds($surveyId)
+    public function getResultByQuestionIds($surveyId, $time = null)
     {
         $questionIds = $this->getQuestionIds($surveyId);
 
-        return $this->answerRepository->getResultByAnswer($questionIds);
+        if (!$time) {
+            return $this->answerRepository->getResultByAnswer($questionIds);
+        }
+
+        return $this->answerRepository->getResultByAnswer($questionIds, $time);
     }
 }

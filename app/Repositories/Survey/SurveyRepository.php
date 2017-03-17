@@ -228,16 +228,31 @@ class SurveyRepository extends BaseRepository implements SurveyInterface
             ->toArray();
     }
 
-    public function getHistory($userId, $surveyId)
+    public function getHistory($userId, $surveyId, array $options)
     {
-        if (!$userId) {
+        if (!$userId && $options['type'] == 'history' || !$surveyId) {
             return [];
         }
 
-        $results = $this->questionRepository
-            ->getResultByQuestionIds($surveyId)
-            ->where('sender_id', $userId)
-            ->get();
+        if ($options['type'] == 'history') {
+            $results = $this->questionRepository
+                ->getResultByQuestionIds($surveyId)
+                ->where('sender_id', $userId)
+                ->get();
+        } else {
+            $email = $options['email'];
+            $results = $this->questionRepository
+                ->getResultByQuestionIds($surveyId)
+                ->where(function($query) use ($userId, $email) {
+                    $query->where('sender_id', $userId)
+                        ->orWhere('email', $email ?: config('settings.email_unidentified'));
+                })
+                ->get()
+                ->toArray();
+            $collection = collect($results);
+
+            return $collection->groupBy('created_at')->toArray();
+        }
 
         if (!$results) {
             return [];
@@ -247,7 +262,7 @@ class SurveyRepository extends BaseRepository implements SurveyInterface
         $maxCreate = $results->max('created_at');
 
         foreach ($results as $key => $value) {
-            if ($value->created_at == $maxCreate) {
+            if ($options['type'] == 'history' && $value->created_at == $maxCreate) {
                 $history[$value->answer_id] = $value->content;
             }
         }
@@ -269,8 +284,22 @@ class SurveyRepository extends BaseRepository implements SurveyInterface
             'created_at',
             'name',
             'email',
-        ]);
+            'sender_id',
+        ])
+        ->toArray();
+        /*
+            Get all user answer survey and group by user id.
+            Sender_id can be null.
+        */
+        $collection = collect($results)->groupBy('sender_id')->toArray();
+        //  Get users login when anwser survey with key = user id.
+        $userLogin = collect($collection)->except([""])->toArray();
+        /*
+            Get users not login when answer survey and group by email.
+            Email can be set default because user don't need enter email.
+        */
+        $userNotLogin = collect($collection[""])->groupBy('email')->toArray();
 
-        return $results;
+        return array_merge($userLogin, $userNotLogin);
     }
 }

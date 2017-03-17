@@ -7,6 +7,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Result\ResultInterface;
 use DB;
 use Exception;
+use Carbon\Carbon;
 
 class AnswerRepository extends BaseRepository implements AnswerInterface
 {
@@ -50,11 +51,19 @@ class AnswerRepository extends BaseRepository implements AnswerInterface
         return $this->whereIn('question_id', $questionIds)->lists('id')->toArray();
     }
 
-    public function getResultByAnswer($questionIds)
+    public function getResultByAnswer($questionIds, $time = null)
     {
         $answerIds = $this->getAnswerIds($questionIds);
 
-        return $this->resultRepository
+        if (!$time) {
+            return $this->resultRepository
                 ->whereIn('answer_id', $answerIds);
+        }
+
+        $time = Carbon::parse($time)->format('Y-m-d');
+
+        return $this->resultRepository
+            ->whereIn('answer_id', $answerIds)
+            ->where('created_at', 'LIKE', "%$time%");
     }
 }

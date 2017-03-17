@@ -19,16 +19,21 @@
         @foreach ($listUserAnswer as $user)
             <tr>
                 <td>
-                    {{ $user->name }}
+                    {{ $user[0]['name'] }}
                 </td>
                 <td>
-                    {{ $user->email }}
+                    {{ $user[0]['email'] }}
                 </td>
                 <td>
-                    {{ $user->created_at }}
+                    {{ Carbon\Carbon::parse($user[0]['created_at'])->format('Y-m-d') }}
                 </td>
                 <td>
-                    <a href=""></a>
+                    <a href="{{ action('AnswerController@showMultiHistory', [
+                        'surveyId' => $survey->id,
+                        'createdAt' => $user[0]['created_at'],
+                        'userId' => $user[0]['sender_id'],
+                        'email' => $user[0]['email'],
+                    ]) }}">{{ trans('home.link') }}</a>
                 </td>
             </tr>
         @endforeach

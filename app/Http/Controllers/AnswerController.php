@@ -76,7 +76,7 @@ class AnswerController extends Controller
 
         $access = $this->surveyRepository->getSettings($survey->id);
         $listUserAnswer = $this->showUserAnswer($token);
-        $history = ($view == 'answer') ? $this->surveyRepository->getHistory(auth()->id(), $survey->id) : null;
+        $history = ($view == 'answer') ? $this->surveyRepository->getHistory(auth()->id(), $survey->id, ['type' => 'history']) : null;
         $getCharts = $this->viewChart($survey->token);
         $status = $getCharts['status'];
         $charts = $getCharts['charts'];
@@ -132,5 +132,26 @@ class AnswerController extends Controller
     public function showUserAnswer($token)
     {
         return $this->surveyRepository->getUserAnswer($token);
+    }
+
+    public function showMultiHistory(Request $request, $surveyId, $userId = null, $email = null)
+    {
+        $survey = $this->surveyRepository->find($surveyId);
+
+        if (!$survey) {
+            return action('SurveyController@index')
+                ->with('message-fail', trans('messages.load_fail', [
+                    'object' => class_basename(Result::class),
+            ]));
+        }
+
+        $options = [
+            'type' => 'result',
+            'email' => $email,
+        ];
+
+        $history  = $this->surveyRepository->getHistory($userId, $surveyId, $options);
+
+        return view('user.pages.view-result-user', compact('history', 'survey'));
     }
 }

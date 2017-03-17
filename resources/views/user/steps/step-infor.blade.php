@@ -71,25 +71,4 @@
             ]) !!}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-4 col-md-offset-4">
-            <ul class="label-info-question data-list">
-                <li>
-                    <strong class="strong-question">
-                        {{ trans('info.do_you_want') }}
-                        <a>
-                            {{ trans('info.public') }}
-                        </a>
-                        {{ trans('info.this_survey') }}?
-                    </strong>
-                    <div class="slideThree">
-                        {{ Form::checkbox('feature', config('settings.feature'), '', [
-                            'id' => 'feature',
-                        ]) }}
-                        {{ Form::label('feature', ' ') }}
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
 </div>
