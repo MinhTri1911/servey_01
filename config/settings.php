@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'image_system' => '/library/images/',
+    'image_system' => '/user/images/',
     'image_user_default' => 'user/images/default_user.png',
     'image_default' => 'questionDefault.png',
     'image_path' => 'image/',

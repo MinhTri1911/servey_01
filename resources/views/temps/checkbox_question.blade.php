@@ -48,7 +48,7 @@
                 {!! Form::file("image[answers][$number][]", [
                     'class' => 'hidden-image fileImgAnswer' . $number . '0',
                 ]) !!}
-                <a class="glyphicon glyphicon-remove" id-as="{{ $number }}0" num="{{ $number }}">
+                <a class="glyphicon glyphicon-remove btn-remove-answer" id-as="{{ $number }}0" num="{{ $number }}">
                 </a>
             </div>
         </div>
@@ -78,7 +78,7 @@
                 {!! Form::file("image[answers][$number][]", [
                     'class' => 'hidden-image fileImgAnswer' . $number . 1,
                 ]) !!}
-                <a class="glyphicon glyphicon-remove" id-as="{{ $number }}1" num="{{ $number }}"></a>
+                <a class="glyphicon glyphicon-remove btn-remove-answer" id-as="{{ $number }}1" num="{{ $number }}"></a>
             </div>
         </div>
         <div class="content-image-answer{{ $number }}1 div-image-answer animated slideInDown">

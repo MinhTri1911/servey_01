@@ -46,6 +46,7 @@ $(document).ready(function() {
                 }
 
             } else if ( state.stepIndex === 2 ) {
+                $('html, body').animate({scrollTop: 0}, 500);
 
                 if($('.data').attr('data-question') == 0) {
                     $('.create-question-validate')
@@ -56,6 +57,7 @@ $(document).ready(function() {
                     return false;
                 }
             } else if ( state.stepIndex === 3 ) {
+                    $('html, body').animate({scrollTop: 0}, 1000);
                     var flag = temp = true;
                     var c1 = $('#requirement-answer').is(':checked');
                     var c2 = $('.option-choose-answer').is(':checked');

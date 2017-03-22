@@ -22,16 +22,6 @@
             'enctype' => 'multipart/form-data',
         ]) !!}
             <div id="middle-wizard" class="wizard-branch wizard-wrapper">
-                @if (Session::has('message'))
-                    <div class="alert alert-info alert-message">
-                        {{ Session::get('message') }}
-                    </div>
-                @endif
-                @if (Session::has('message-fail'))
-                    <div class="alert alert-danger alert-message">
-                        {{ Session::get('message-fail') }}
-                    </div>
-                @endif
                 @include('user.steps.step-infor')
                 @include('user.steps.step-create-survey')
                 @include('user.steps.step-setting')
@@ -39,11 +29,12 @@
                 @include('user.steps.step-finish')
             </div>
             <div id="bottom-wizard">
-                {!! Form::button(trans('home.backward'), [
+                <div class="shadow-bottom"></div>
+                {!! Form::button(trans('home.back'), [
                     'class' => 'backward',
                     'disabled' => 'disabled',
                 ]) !!}
-                {!! Form::button(trans('home.forward'), [
+                {!! Form::button(trans('home.next'), [
                     'class' => 'forward ',
                     'disabled' => 'disabled',
                 ]) !!}

@@ -126,7 +126,7 @@
                                                             'method' => 'GET',
                                                         ]) !!}
                                                             {!! Form::submit('', [
-                                                                'class' => 'div-hidden exportExecl',
+                                                                'class' => 'div-hidden exportExcel',
                                                             ]) !!}
                                                         {!! Form::close() !!}
                                                         {!! Form::open(['action' => [
@@ -147,7 +147,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="content-4 div-hidden"></div>
+                            <div class="content-4 div-hidden">
+                                @include('user.update-survey.update-survey')
+                            </div>
                         </div>
                     </section>
                 </div>

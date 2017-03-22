@@ -53,6 +53,7 @@ class SurveyController extends Controller
                 'key' => config('settings.key.limitAnswer'),
                 'value' => 0,
             ])
+            ->where('value', '<>', '')
             ->lists('survey_id')
             ->toArray();
     }
@@ -102,7 +103,37 @@ class SurveyController extends Controller
         return view('user.pages.answer', compact('surveys'));
     }
 
-    public function updateSurvey(Request $request, $id)
+    // public function updateSurvey(Request $request, $id)
+    // {
+    //     $survey = $this->surveyRepository->find($id);
+    //     $isSuccess = false;
+    //     $data = $request->only([
+    //         'title',
+    //         'description',
+    //     ]);
+    //     $data['deadline'] = Carbon::parse($request->get('deadline'))->format('Y/m/d H:i');
+
+    //     if ($survey) {
+    //         DB::beginTransaction();
+    //         try {
+    //             $isSuccess = $this->surveyRepository->update($id, $data);
+    //             DB::commit();
+    //         } catch (Exception $e) {
+    //             DB::rollback();
+    //         }
+    //     }
+
+    //     return redirect()->action('AnswerController@show', $survey->token_manage)
+    //         ->with(($isSuccess) ? 'message' : 'message-fail', ($isSuccess)
+    //             ? trans('messages.object_updated_successfully', [
+    //                 'object' => class_basename(Survey::class),
+    //             ])
+    //             : trans('messages.object_updated_unsuccessfully', [
+    //                 'object' => class_basename(Survey::class)
+    //             ])
+    //         );
+    // }
+    public function updateInfoSurvey(Request $request, $id)
     {
         $survey = $this->surveyRepository->find($id);
         $isSuccess = false;
@@ -131,6 +162,29 @@ class SurveyController extends Controller
                     'object' => class_basename(Survey::class)
                 ])
             );
+    }
+
+    public function updateSurvey(Request $request, $surveyId)
+    {
+        DB::beginTransaction();
+        try {
+            $inputs = $request->only([
+                'txt-question',
+                'checkboxRequired',
+                'required-question',
+                'image',
+            ]);
+
+            $x = $this->questionRepository->updateSurvey($inputs, $request->get('survey-info'));
+
+            DB::commit();
+
+            return $x;
+        } catch (Exception $e) {
+            DB::rollback();
+
+            throw $e;
+        }
     }
 
     public function create(Request $request)

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+
     $('#langs').on('change', function () {
         var url = $(this).attr('data-url');
         var urlHome = $(this).attr('data-url-home');

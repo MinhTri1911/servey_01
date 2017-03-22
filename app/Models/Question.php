@@ -11,6 +11,7 @@ class Question extends Model
         'image',
         'required',
         'survey_id',
+        'sequence',
     ];
 
     public function survey()
@@ -20,7 +21,7 @@ class Question extends Model
 
     public function answers()
     {
-        return $this->hasMany(Answer::class);
+        return $this->hasMany(Answer::class)->orderBy('type');
     }
 
     public function getImageAttribute()

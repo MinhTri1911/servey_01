@@ -25,7 +25,7 @@ elixir(mix => {
    .webpack('app.js')
    .scripts('chart.js', 'public/admin/js/chart.js')
    .scripts('question.js', 'public/user/js/question.js')
-   .scripts('function.js', 'public/user/js/function.js')
+   .scripts('functions.js', 'public/user/js/function.js')
    .scripts('jquery.bxslider.min.js', 'public/user/js/jquery.bxslider.min.js')
    .scripts('check.min.js', 'public/user/js/check.min.js')
    .scripts('jquery.wizard.js', 'public/user/js/jquery.wizard.js')
@@ -35,6 +35,7 @@ elixir(mix => {
    .scripts('form-request.js', 'public/admin/js/form-request.js')
    .scripts('admin-script.js', 'public/admin/js/admin-script.js')
    .copy('resources/assets/fonts', 'public/admin/fonts')
+   .copy('resources/assets/css/404.css', 'public/user/errors/404.css')
    .copy('resources/assets/images', 'public/user/images')
    .copy([
             'public/bower/bootstrap/dist/css/bootstrap.css',

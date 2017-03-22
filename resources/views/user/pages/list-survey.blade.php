@@ -108,7 +108,6 @@
                                                         @else
                                                             <td class="margin-center" colspan="2">
                                                                 {{ trans('survey.closed_or_private') }}
-                                                                {{ $survey->status }}
                                                             </td>
                                                         @endif
                                                         <td class="margin-center">

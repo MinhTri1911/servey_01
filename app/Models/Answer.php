@@ -10,6 +10,7 @@ class Answer extends Model
         'content',
         'type',
         'question_id',
+        'image',
     ];
 
     public function question()
@@ -30,6 +31,6 @@ class Answer extends Model
 
         $answerImgUrl = $this->attributes['image'];
 
-        return asset(config('settings.answer_img_url') . $answerImgUrl);
+        return asset(config('settings.image_answer_path') . $answerImgUrl);
     }
 }

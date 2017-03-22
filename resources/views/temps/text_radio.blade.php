@@ -17,7 +17,7 @@
             {!! Form::file("image[answers][$number][]", [
                 'class' => 'hidden-image fileImgAnswer' . $number . $num_as,
             ]) !!}
-            <a class="glyphicon glyphicon-remove" id-as="{{ $number }}{{ $num_as }}" num="{{ $number }}">
+            <a class="glyphicon glyphicon-remove btn-remove-answer" id-as="{{ $number }}{{ $num_as }}" num="{{ $number }}">
             </a>
         </div>
     </div>

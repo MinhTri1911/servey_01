@@ -3,6 +3,7 @@
 namespace App\Repositories\Answer;
 
 use App\Models\Answer;
+use App\Models\Result;
 use App\Repositories\BaseRepository;
 use App\Repositories\Result\ResultInterface;
 use DB;
@@ -65,5 +66,14 @@ class AnswerRepository extends BaseRepository implements AnswerInterface
         return $this->resultRepository
             ->whereIn('answer_id', $answerIds)
             ->where('created_at', 'LIKE', "%$time%");
+    }
+
+    public function deleteResultWhenUpdateAnswer($ids)
+    {
+        $ids = is_array($ids) ?: [$ids];
+        $resultsId = $this->resultRepository->whereIn('answer_id', $ids)->lists('id')->toArray();
+        $this->resultRepository->newQuery(new Result());
+
+        return $this->resultRepository->delete($resultsId);
     }
 }

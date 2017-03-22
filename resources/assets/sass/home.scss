@@ -178,6 +178,14 @@
     margin-bottom: 5px;
     width: 102%;
     margin-left: 2%;
+    .remove-answer {
+        display: none;
+    }
+    &:hover {
+        .remove-answer {
+            display: block;
+        }
+    }
 }
 
 .div-radius {
@@ -275,7 +283,7 @@
 .remove-answer {
     margin-left: -10px;
     margin-top: 25px;
-    display: none;
+//    display: none;
 }
 
 .choose-action {

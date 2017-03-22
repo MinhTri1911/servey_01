@@ -82,7 +82,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.export-excel', function() {
-        $('.exportExecl').click();
+        $('.exportExcel').click();
     });
 
     $(document).on('click', '.export-PDF', function() {
@@ -144,6 +144,8 @@ $(document).ready(function() {
     });
 
     $('.submit-answer').prop('disabled', false);
+
+    $('input[type=submit]').prop('disabled', false);
 
     $(document).on('click', '.active-answer', function() {
         $('.container-list-answer').fadeIn();

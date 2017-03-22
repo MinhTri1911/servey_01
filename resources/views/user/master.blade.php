@@ -13,8 +13,8 @@
         @include('user.blocks.popup-send-mail')
         {!! Form::hidden('', '', [
             'class' => 'data',
-            'data-number' => config('temp.data_number'),
-            'data-question' => config('temp.data_question'),
+            'data-number' => config('temp.data_number') . strtotime(Carbon\Carbon::now()),
+            'data-question' => config('temp.data_question') . strtotime(Carbon\Carbon::now()),
             'data-error' => trans('home.error'),
             'data-confirm' => trans('temp.confirm'),
             'data-email-invalid' => trans('temp.email_invalid'),

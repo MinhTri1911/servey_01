@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateQuestionsTable extends Migration
+class CreateColumnSequenceQuestionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class UpdateQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->string('image')->nullable()->change();
+        Schema::table('questions', function(Blueprint $table) {
+            $table->integer('sequence');
         });
     }
 
@@ -25,8 +25,8 @@ class UpdateQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('questions', function (Blueprint $table) {
-            $table->string('image')->change();
+        Schema::table('questions', function(Blueprint $table) {
+            $table->dropColumn('sequence');
         });
     }
 }
