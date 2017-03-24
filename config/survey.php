@@ -29,4 +29,7 @@ return [
     ],
     'type_xls' => 'xls',
     'type_xlsx' => 'xlsx',
+    'field' => [
+        'sequence' => 'sequence',
+    ],
 ];

@@ -11,10 +11,15 @@
     </head>
     <body>
         @include('user.blocks.popup-send-mail')
+        <div class="append-multi-history">
+            <div class="popup-user-answer">
+                <div class="popup-content-history popupCenter"></div>
+            </div>
+        </div>
         {!! Form::hidden('', '', [
             'class' => 'data',
-            'data-number' => config('temp.data_number') . strtotime(Carbon\Carbon::now()),
-            'data-question' => config('temp.data_question') . strtotime(Carbon\Carbon::now()),
+            'data-number' => config('temp.data_number') . Carbon\Carbon::now()->timestamp,
+            'data-question' => config('temp.data_question') . Carbon\Carbon::now()->timestamp,
             'data-error' => trans('home.error'),
             'data-confirm' => trans('temp.confirm'),
             'data-email-invalid' => trans('temp.email_invalid'),

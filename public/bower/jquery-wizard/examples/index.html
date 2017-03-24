@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+	<head>
+		<title>jQuery JavaScript Form Wizard | jQuery.wizard</title>
+
+		<meta name="description" content="A jQuery plugin that turns a standard
+		HTML form into a form wizard by breaking it into a series of
+		well-defined steps. The purpose of these steps is to better group
+		related inputs, preventing the user from becoming overwhelmed at the
+		size or complexity of a form and helping them to better understand
+		the structure of an unfamiliar form.">
+
+		<meta name="keywords" content="form, wizard, javascript, jquery,
+		asynchronous, branching, steps, finite-state machine, transitions,
+		stateful">
+
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<link rel="stylesheet" type="text/css" href="../external/jquery/ui/smoothness/jquery-ui-1.10.4.custom.min.css" />
+
+		<script type="text/javascript" src="../external/jquery/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../external/jquery/ui/jquery-ui-1.10.4.custom.min.js"></script>
+		<script type="text/javascript" src="../src/jquery.wizard.js"></script>
+
+		<!-- Optional scripts -->
+		<script type="text/javascript" src="../external/jquery/form/jquery.form-3.50.js"></script>
+		<script type="text/javascript" src="../external/jquery/validate/jquery.validate-1.12.0.min.js"></script>
+
+		<!-- Demo -->
+		<script type="text/javascript">
+			jQuery(function($) {
+				// Example 1: Basic wizard with validation
+				$( "#example-1" ).wizard({
+					stepsWrapper: "#wrapped",
+					submit: ".submit",
+					beforeForward: function( event, state ) {
+						if ( state.stepIndex === 1 ) {
+							$("#name").text($("[name=name]").val());
+
+						} else if ( state.stepIndex === 2 ) {
+							$("#gender").text($("[name=gender]").val());
+						}
+						return !!$( this ).wizard( "form" ).valid();
+					}
+				}).wizard( "form" ).submit(function( event ) {
+					event.preventDefault();
+					alert( "Form submitted!" );
+
+				}).validate({
+					errorPlacement: function( error, element ) {
+						if ( element.is( ":radio" ) || element.is( ":checkbox" ) ) {
+							error.insertBefore( element.next() );
+
+						} else {
+							error.insertAfter( element );
+						}
+					}
+				});
+
+				// Example 2: Basic wizard with progress bar
+				$( "#progressbar" ).progressbar();
+
+				$( "#example-2" ).wizard({
+					afterSelect: function( event, state ) {
+						$( "#progressbar" ).progressbar( "value", state.percentComplete );
+						$( "#location" ).text( "(" + state.stepsComplete + "/" + state.stepsPossible + ")" );
+					}
+				});
+
+				// Example 3: Basic branching wizard
+				$( "#example-3" ).wizard({
+					transitions: {
+						color: function( state, action ) {
+							var branch = state.step.find( "[name=color]:checked" ).val();
+
+							if ( !branch ) {
+								alert( "Please select a value to continue." );
+							}
+
+							return branch;
+						}
+					}
+				});
+
+				// Example 4: Nested Branches
+				$( "#example-4" ).wizard();
+			});
+		</script>
+	</head>
+	<body>
+		<h1><a href="../" title="jQuery.wizard">jQuery.wizard</a></h1>
+
+		<div id="wrapper">
+			<div id="example-1">
+				<h2>Basic Wizard With Validation</h2>
+
+				<form name="example-1" id="wrapped">
+					<div class="step">
+						<label>What is your name?</label>
+						<input type="text" name="name" class="required" />
+					</div>
+
+					<div class="step">
+						<p>What is your gender?</p>
+						<input type="radio" name="gender" value="male" class="required" />Male<br />
+						<input type="radio" name="gender" value="female" class="required" />Female<br />
+					</div>
+
+					<div class="submit step">
+						<p>You are a <span id="gender"></span> named <span id="name"></span>.</p>
+					</div>
+
+					<div class="navigation">
+						<ul class="clearfix">
+							<li><button type="button" name="backward" class="backward">Backward</button></li>
+							<li><button type="button" name="forward" class="forward">Forward</button></li>
+							<li><button type="submit" name="process" class="submit">Submit</button></li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div id="example-2">
+				<h2>Basic Wizard With Progress Bar</h2>
+
+				<div class="pad">
+					<h3>Progress <span id="location"></span></h3>
+					<div id="progressbar"></div>
+				</div>
+
+				<form name="example-2">
+					<div class="step">
+						<p>This basic wizard has a progress bar attached to it.</p>
+					</div>
+
+					<div class="step">
+						<p>Note your progress in the progress bar above.</p>
+					</div>
+
+					<div class="step">
+						<p>You have reached the end of this wizard. Yippee!</p>
+					</div>
+
+					<div class="navigation">
+						<ul class="clearfix">
+							<li><button type="button" name="backward" class="backward">Backward</button></li>
+							<li><button type="button" name="forward" class="forward">Forward</button></li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div id="example-3">
+				<h2>Branching Wizard</h2>
+
+				<form name="example-3">
+					<div class="step">
+						<p>This is a branching wizard. You will see different steps depending on your answers.</p>
+					</div>
+
+					<div class="step" data-state="color">
+						<p>Which color do you like best?</p>
+						<label for="colorPink"><input type="radio" name="color" value="pink" id="colorPink" />Pink</label>
+						<label for="colorBlue"><input type="radio" name="color" value="blue" id="colorBlue" />Blue</label>
+					</div>
+
+					<div class="branch" id="pink">
+						<div class="step" data-state="end">
+							<p class="pink">Pink, it was love at first sight</p>
+						</div>
+					</div>
+
+					<div class="branch" id="blue">
+						<div class="step" data-state="end">
+							<p class="blue">I'm blue da ba dee da ba die...</p>
+						</div>
+					</div>
+
+					<div class="step" id="end">
+						<p>FIN.</p>
+					</div>
+
+					<div class="navigation">
+						<ul class="clearfix">
+							<li><button type="button" name="backward" class="backward">Backward</button></li>
+							<li><button type="button" name="forward" class="forward">Forward</button></li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div id="example-4">
+				<h2>Nested Branches</h2>
+
+				<form name="example-3">
+					<div class="step" data-state="e4-branch-1">
+						<p>Start</p>
+					</div>
+
+					<div class="branch" id="e4-branch-1">
+						<div class="step" data-state="e4-branch-2">Branch Step</div>
+
+						<div class="branch" id="e4-branch-2">
+							<div class="step" data-state="e4-finish">Nested Branch Step</div>
+						</div>
+					</div>
+
+					<div class="step" id="e4-finish">
+						<p>Finish</p>
+					</div>
+
+					<div class="navigation">
+						<ul class="clearfix">
+							<li><button type="button" name="backward" class="backward">Backward</button></li>
+							<li><button type="button" name="forward" class="forward">Forward</button></li>
+						</ul>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

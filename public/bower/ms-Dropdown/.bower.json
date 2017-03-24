@@ -1,0 +1,38 @@
+{
+  "name": "ms-Dropdown",
+  "homepage": "http://www.marghoobsuleman.com/",
+  "authors": [
+    "Marghoob Suleman"
+  ],
+  "description": "image dropdown plugin",
+  "main": [
+    "js/msdropdown/jquery.dd.js",
+    "css/msdropdown/dd.css"
+  ],
+  "moduleType": [],
+  "keywords": [
+    "combo",
+    "box",
+    "dropdown"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^1.9.x"
+  },
+  "_release": "42fa1d455b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "42fa1d455b370736f71e89eef4a375807e1e8547"
+  },
+  "_source": "https://github.com/marghoobsuleman/ms-Dropdown.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/marghoobsuleman/ms-Dropdown.git"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "jquery-wizard",
+  "version": "1.1.1",
+  "main": [
+    "src/jquery.wizard.js"
+  ],
+  "dependencies": {
+    "jquery": ">=1.6.0",
+    "jquery-ui": ">=1.9.0"
+  },
+  "homepage": "https://github.com/kflorence/jquery-wizard",
+  "_release": "1.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.1",
+    "commit": "051811405ace505b8d408c9d063e1de644b032af"
+  },
+  "_source": "https://github.com/kflorence/jquery-wizard.git",
+  "_target": "1.1.1",
+  "_originalSource": "jquery-wizard"
+}

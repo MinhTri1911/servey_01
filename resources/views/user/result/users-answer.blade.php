@@ -28,12 +28,12 @@
                     {{ Carbon\Carbon::parse($user[0]['created_at'])->format('Y-m-d') }}
                 </td>
                 <td>
-                    <a href="{{ action('AnswerController@showMultiHistory', [
+                    <a class="show-multi-history" data-url="{{ action('AnswerController@showMultiHistory', [
                         'surveyId' => $survey->id,
                         'createdAt' => $user[0]['created_at'],
                         'userId' => $user[0]['sender_id'],
                         'email' => $user[0]['email'],
-                    ]) }}">{{ trans('home.link') }}</a>
+                    ]) }}">{{ trans('survey.link') }}</a>
                 </td>
             </tr>
         @endforeach

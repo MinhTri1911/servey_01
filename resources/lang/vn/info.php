@@ -17,7 +17,7 @@ return [
     'title' => 'Tiêu đề',
     'email' => 'Email',
     'do_you_want' => 'Bạn có muốn',
-    'public' => 'công khai',
+    'public' => 'Công khai',
     'this_survey' => 'cuộc khảo sát này',
     'description' => 'Nhập mô tả cho cuộc khảo sát này',
     'enter_info' => 'Nhập thông tin của bạn',
@@ -32,4 +32,5 @@ return [
     'sender_email' => 'Nhập email người mà bạn muốn gửi...',
     'survey_created' => 'Survey của bạn đã được tạo',
     'link_send' => 'Gửi link này đến bất cứ người nào mà bạn muốn mời',
+    'datetime_format' => 'd M Y',
 ];

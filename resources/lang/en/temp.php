@@ -8,6 +8,7 @@ return [
     'send_mail' => 'Send mails',
     'email_name' => "Input email's name here . . .",
     'send' => 'Send',
+    'cancel' => 'Cancel',
     'view_result' => 'View result',
     'dont_have_result' => "Don't have any result",
     'email_invalid' => 'Email invalid, check again please',

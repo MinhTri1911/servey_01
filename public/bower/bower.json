@@ -1,0 +1,21 @@
+{
+  "name": "bower",
+  "homepage": "https://github.com/MinhTri1911/servey_01",
+  "authors": [
+    "MinhTri1911 <huynh.ngoc.minh.tri@framgia.com>"
+  ],
+  "description": "\"\"",
+  "main": "\"bower.json\"",
+  "keywords": [
+    "bower"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower/",
+    "test",
+    "tests"
+  ]
+}

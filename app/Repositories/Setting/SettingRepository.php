@@ -75,8 +75,8 @@ class SettingRepository extends BaseRepository implements SettingInterface
             ->get();
 
         foreach ($settings as $setting) {
-            if(!array_has($value['setting'], $setting->key)) {
-                $value['setting'][$setting->key] = '';
+            if (!array_has($value['setting'], $setting->key) || !$value['setting'][$setting->key]) {
+                $value['setting'][$setting->key] = null;
             }
 
             $input = [

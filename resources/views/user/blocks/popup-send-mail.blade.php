@@ -38,7 +38,7 @@
                             ]) !!}
                         </div>
                         <div class="col-md-6">
-                            {!! Form::button(trans('home.send_mail'),  [
+                            {!! Form::button(trans('temp.cancel'),  [
                                 'class' => 'btn-close-popup',
                             ]) !!}
                         </div>

@@ -1,21 +1,16 @@
 <div class="detail-survey">
     {!! Form::open([
-        'id' => 'wrapped',
+        'id' => 'wrapped-update',
         'class' => 'wizard-form',
-        'action' => ['SurveyController@updateSurvey', 'surveyId' => $survey->id],
+        'action' => ['SurveyController@updateSurveyContent',
+            $survey->id,
+            $survey->token_manage
+        ],
         'novalidate' => 'novalidate',
         'enctype' => 'multipart/form-data',
     ]) !!}
-    @php
-        $array = [
-            'question' => [],
-            'answer' => [],
-            'imageQuestion' => [],
-            'imageAnswer' => [],
-        ];
-    @endphp
-        <div id="middle-wizard" class="wizard-branch wizard-wrapper">
-            <div class="wizard-hidden step row wizard-step">
+        <div class="update-content-survey wizard-branch wizard-wrapper">
+            <div class="step row wizard-step">
                 <div class="title-create row">
                     <div class="col-md-9">
                         <h3 class="wizard-header">
@@ -39,18 +34,14 @@
                 </div>
                 <ul class="container-add-question">
                     <div class="add-question col-md-1"></div>
-                    @php
-                        $removeImagesQuestion = [];
-                        $removeImagesAnswer = [];
-                    @endphp
                     @foreach ($survey->questions as $question)
                         @php
                             $number = $question->id;
                         @endphp
                         <li class="title-question animated zoomIn row question{{ $number }}"
                             question="{{ $number }}"
-                            temp-qs="{{ config('temp.temp_radio') }}"
-                            trash="{{ config('temp.trash_question_radio') }}">
+                            temp-qs="{{ count($question->answers) - 1 }}"
+                            trash="{{ count($question->answers) }}">
                             <div>
                                 <div class="row">
                                     <div class="text-question col-md-10">
@@ -71,21 +62,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="content-image-question{{ $number }} div-image-question animated slideInDown">
-                                {!! Html::image(config('temp.image_default'), '', [
+                            <div class="content-image-question{{ $number }}
+                                {{ $question->image ? 'show-image-question' : 'div-image-question' }}
+                                animated slideInDown">
+                                {!! Html::image($question->image ?: config('temp.image_default'), '', [
                                     'class' => 'set-image image-question' . $number,
                                 ]) !!}
-                                <span class="remove-image-question glyphicon glyphicon-remove" id-question="{{ $number }}"></span>
+                                <span class="remove-image-question glyphicon glyphicon-remove"
+                                    id-question="{{ $number }}"
+                                    data-id-image="{{ $number }}">
+                                </span>
                             </div>
-                            @if ($question->image)
-                                @php
-                                    $removeImagesQuestion[] = $question->id;
-                                @endphp
-                                {!! Html::image($question->image, '',[
-                                    'class' => 'show-img-answer',
-                                ]) !!}
-                                <span class="remove-image-question glyphicon glyphicon-remove" id-question="{{ $number  }}"></span>
-                            @endif
                             @foreach ($question->answers as $answer)
                                 @switch($answer->type)
                                     @case(config('survey.type_radio'))
@@ -108,25 +95,24 @@
                                                     {!! Form::file("image[answers][$number][]", [
                                                         'class' => 'hidden-image fileImgAnswer' . $number . $loop->index,
                                                     ]) !!}
-                                                    <a class="glyphicon glyphicon-remove" id-as="{{ $number . $loop->index }}" num="{{ $number  }}" data-answerId="{{ $answer->id }}">
+                                                    <a class="glyphicon glyphicon-remove btn-remove-answer"
+                                                        id-as="{{ $number . $loop->index }}"
+                                                        num="{{ $number  }}"
+                                                        data-answerId="{{ $answer->id }}">
                                                     </a>
                                                 </div>
                                             </div>
-                                            @if ($answer->image)
-                                                <div class="content-image-answer{{ $number . $loop->index }} show-update div-image-answer animated slideInDown">
-                                                    {!! Html::image($answer->image, '', [
-                                                        'class' => 'set-image-answer image-answer' . $number . $loop->index,
-                                                    ]) !!}
-                                                    <span class="remove-image-answer glyphicon glyphicon-remove" id-answer="{{ $number . $loop->index }}"></span>
-                                                </div>
-                                            @else
-                                                <div class="content-image-answer{{ $number . $loop->index }} div-image-answer animated slideInDown">
-                                                    {!! Html::image(config('temp.image_default'), '', [
-                                                        'class' => 'set-image-answer image-answer' . $number . $loop->index,
-                                                    ]) !!}
-                                                    <span class="remove-image-answer glyphicon glyphicon-remove" id-answer="{{ $number . $loop->index }}"></span>
-                                                </div>
-                                            @endif
+                                            <div class="content-image-answer{{ $number . $loop->index }}
+                                                {{ $answer->image ? 'show-image-answer' : 'div-image-answer' }}
+                                                show-update animated slideInDown">
+                                                {!! Html::image($answer->image, '', [
+                                                    'class' => 'set-image-answer image-answer' . $number . $loop->index,
+                                                ]) !!}
+                                                <span class="remove-image-answer glyphicon glyphicon-remove"
+                                                    id-answer="{{ $number . $loop->index }}"
+                                                    data-answerId="{{ $answer->id }}">
+                                                </span>
+                                            </div>
                                         </div>
                                         @breakswitch
                                     @case(config('survey.type_checkbox'))
@@ -149,25 +135,24 @@
                                                     {!! Form::file("image[answers][$number][]", [
                                                         'class' => 'hidden-image fileImgAnswer' . $number . $loop->index,
                                                     ]) !!}
-                                                    <a class="glyphicon glyphicon-remove" id-as="{{ $number . $loop->index}}" num="{{ $number }}" data-answerId="{{ $answer->id }}">
+                                                    <a class="glyphicon glyphicon-remove btn-remove-answer"
+                                                        id-as="{{ $number . $loop->index}}"
+                                                        num="{{ $number }}"
+                                                        data-answerId="{{ $answer->id }}">
                                                     </a>
                                                 </div>
                                             </div>
-                                            @if ($answer->image)
-                                                <div class="content-image-answer{{ $number . $loop->index }} show-update div-image-answer animated slideInDown">
-                                                    {!! Html::image($answer->image, '', [
-                                                        'class' => 'set-image-answer image-answer' . $number . $loop->index,
-                                                    ]) !!}
-                                                    <span class="remove-image-answer glyphicon glyphicon-remove" id-answer="{{ $number . $loop->index }}"></span>
-                                                </div>
-                                            @else
-                                                <div class="content-image-answer{{ $number . $loop->index }} div-image-answer animated slideInDown">
-                                                    {!! Html::image(config('temp.image_default'), '', [
-                                                        'class' => 'set-image-answer image-answer' . $number . $loop->index,
-                                                    ]) !!}
-                                                    <span class="remove-image-answer glyphicon glyphicon-remove" id-answer="{{ $number . $loop->index }}"></span>
-                                                </div>
-                                            @endif
+                                            <div class="content-image-answer{{ $number . $loop->index }}
+                                                {{ $answer->image ? 'show-image-answer' : 'div-image-answer' }}
+                                                show-update animated slideInDown">
+                                                {!! Html::image($answer->image, '', [
+                                                    'class' => 'set-image-answer image-answer' . $number . $loop->index,
+                                                ]) !!}
+                                                <span class="remove-image-answer glyphicon glyphicon-remove"
+                                                    id-answer="{{ $number . $loop->index }}"
+                                                    data-answerId="{{ $answer->id }}">
+                                                </span>
+                                            </div>
                                         </div>
                                         @breakswitch
                                     @case(config('survey.type_text'))
@@ -231,7 +216,11 @@
                                                 </div>
                                             </div>
                                             <div class="remove-answer col-md-1">
-                                                <a class="glyphicon glyphicon-remove remove-other" id-qs="{{ $number }}" num="{{ $number }}" data-answerId="{{ $answer->id }}"></a>
+                                                <a class="glyphicon glyphicon-remove remove-other"
+                                                    id-qs="{{ $number }}"
+                                                    num="{{ $number }}"
+                                                    data-answerId="{{ $answer->id }}">
+                                                </a>
                                             </div>
                                         </div>
                                         @breakswitch
@@ -248,22 +237,21 @@
                                                 </div>
                                             </div>
                                             <div class="remove-answer col-md-1">
-                                                <a class="glyphicon glyphicon-remove remove-other" id-qs="{{ $number }}" num="{{ $number }}" data-answerId="{{ $answer->id }}"></a>
+                                                <a class="glyphicon glyphicon-remove remove-other"
+                                                    id-qs="{{ $number }}"
+                                                    num="{{ $number }}"
+                                                    data-answerId="{{ $answer->id }}">
+                                                </a>
                                             </div>
                                         </div>
                                     @breakswitch
                                 @endswitch
-                                @php
-                                    if ($answer->image) {
-                                        $removeImagesAnswer[] = $answer->id;
-                                    }
-                                @endphp
                             @endforeach
                             @if (in_array($question->answers->first()->type, [
                                     config('survey.type_radio'),
                                     config('survey.type_checkbox'),
                                 ]))
-                            <div class="clear temp-other{{ $number }}"></div>
+                                <div class="clear temp-other{{ $number }}"></div>
                             @endif
                             <div class="choose-action row">
                                 @if ($question->answers->first()->type == config('survey.type_radio'))
@@ -277,11 +265,39 @@
                                         ]) !!}
                                     </div>
                                     <div class="col-md-3">
-                                        {!! Form::button(trans('home.add_other'), [
-                                            'class' => 'add-radio-other other' . $number,
-                                            'typeId' => config('survey.type_other_radio'),
-                                            'url' => action('TempController@addTemp', config('temp.other_radio')),
-                                        ]) !!}
+                                        @if ($question->answers->last()->type == config('survey.type_other_radio'))
+                                            {!! Form::button(trans('home.add_other'), [
+                                                'class' => 'add-radio-other other' . $number . ' div-hidden',
+                                                'typeId' => config('survey.type_other_radio'),
+                                                'url' => action('TempController@addTemp', config('temp.other_radio')),
+                                            ]) !!}
+                                        @else
+                                            {!! Form::button(trans('home.add_other'), [
+                                                'class' => 'add-radio-other other' . $number,
+                                                'typeId' => config('survey.type_other_radio'),
+                                                'url' => action('TempController@addTemp', config('temp.other_radio')),
+                                            ]) !!}
+                                        @endif
+                                    </div>
+                                    <div class="col-md-3" class="div-require">
+                                        <ul class="data-list">
+                                            <li>
+                                            <div class="row">
+                                                <div class="col-md-6 label-require">
+                                                    <strong><a>{{ trans('temp.require') }}?</a></strong>
+                                                </div>
+                                                <div class="col-md-5 button-require">
+                                                    <div class="class-option-require slideThree">
+                                                        {{ Form::checkbox("checkboxRequired[question][$number]", $number, '', [
+                                                            'id' => 'radio' . $number,
+                                                            $question->required ? ('checked = checked') : '',
+                                                        ]) }}
+                                                        {{ Form::label('radio' . $number, ' ') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 @elseif ($question->answers->first()->type == config('survey.type_checkbox'))
                                     <div class="col-md-1"></div>
@@ -294,40 +310,75 @@
                                         ]) !!}
                                     </div>
                                     <div class="col-md-3">
-                                        {!! Form::button(trans('home.add_other'), [
-                                            'class' => 'add-checkbox-other other' . $number,
-                                            'typeId' => config('survey.type_other_checbox'),
-                                            'url' => action('TempController@addTemp', config('temp.other_checkbox')),
-                                        ]) !!}
+                                        @if ($question->answers->last()->type == config('survey.type_other_checkbox'))
+                                            {!! Form::button(trans('home.add_other'), [
+                                                'class' => 'add-checkbox-other other' . $number . ' div-hidden',
+                                                'typeId' => config('survey.type_other_checbox'),
+                                                'url' => action('TempController@addTemp', config('temp.other_checkbox')),
+                                            ]) !!}
+                                        @else
+                                            {!! Form::button(trans('home.add_other'), [
+                                                'class' => 'add-checkbox-other other' . $number,
+                                                'typeId' => config('survey.type_other_checbox'),
+                                                'url' => action('TempController@addTemp', config('temp.other_checkbox')),
+                                            ]) !!}
+                                        @endif
                                     </div>
-                                @endif
-                                <div class="col-md-3" class="div-require">
-                                    <ul class="data-list">
-                                        <li>
-                                        <div class="row">
-                                            <div class="col-md-6 label-require">
-                                                <strong><a>{{ trans('temp.require') }}?</a></strong>
-                                            </div>
-                                            <div class="col-md-5 button-require">
-                                                <div class="class-option-require slideThree">
-                                                    {{ Form::checkbox("checkboxRequired[question][$number]", $number, '', [
-                                                        'id' => 'radio' . $number,
-                                                        $question->required ? ('checked = checked') : '',
-                                                    ]) }}
-                                                    {{ Form::label('radio' . $number, ' ') }}
+                                    <div class="col-md-3" class="div-require">
+                                        <ul class="data-list">
+                                            <li>
+                                            <div class="row">
+                                                <div class="col-md-6 label-require">
+                                                    <strong><a>{{ trans('temp.require') }}?</a></strong>
+                                                </div>
+                                                <div class="col-md-5 button-require">
+                                                    <div class="class-option-require slideThree">
+                                                        {{ Form::checkbox("checkboxRequired[question][$number]", $number, '', [
+                                                            'id' => 'radio' . $number,
+                                                            $question->required ? ('checked = checked') : '',
+                                                        ]) }}
+                                                        {{ Form::label('radio' . $number, ' ') }}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                @else
+                                    <div class="offset-label col-md-6"></div>
+                                        <div class="col-md-3" class="div-require">
+                                            <ul class="data-require data-list">
+                                                <li>
+                                                    <div class="row">
+                                                        <div class="col-md-6 time-text label-require">
+                                                            <strong><a>{{ trans('temp.require') }}?</a></strong>
+                                                        </div>
+                                                        <div class="col-md-5 button-require">
+                                                           <div class="slideThree">
+                                                                {{ Form::checkbox("checkboxRequired[question][$number]", $number, '', [
+                                                                    'id' => 'date' . $number,
+                                                                    $question->required ? ('checked = checked') : '',
+                                                                ]) }}
+                                                                {{ Form::label('date' . $number, ' ') }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                @endif
                             </div>
                         </li>
                     @endforeach
                     <div class="hide"></div>
                 </ul>
                 <div class="row">
-                    <div class="row col-md-4 col-md-offset-8 parent-option">
+                    <div class="col-md-2">
+                        {!! Form::submit('Update', [
+                            'class' => 'btn-change-survey btn btn-info submit-answer',
+                        ]) !!}
+                    </div>
+                    <div class="row col-md-4 col-md-offset-6 parent-option">
                         <div class="col-md-2 col-md-offset-1 container-option-image">
                             <span class="span-option-1">
                                 {{ trans('temp.one_choose') }}
@@ -384,20 +435,14 @@
                             ]) }}
                         </div>
                     </div>
-                    {!! Form::hidden('survey-info', $survey->id) !!}
-                    {!! Form::hidden('remove-images', json_encode([
-                        'questions' => $removeImagesQuestion,
-                        'answers' => $removeImagesAnswer,
-                    ])) !!}
-                    {!! Form::hidden('asda', json_encode($array)) !!}
+                    {!! Form::hidden('del-question', '') !!}
+                    {!! Form::hidden('del-answer', '') !!}
+                    {!! Form::hidden('del-question-image', '') !!}
+                    {!! Form::hidden('del-answer-image', '') !!}
                 </div>
                 </div>
-                {!! Form::submit('Update', [
-                    'class' => 'btn btn-info submit-answer',
-                ]) !!}
             </div>
-
         {!! Form::close() !!}
     </div>
 </div>
-<a class="aaaaaa">ssssssssssssssssssssssssssssssssss</a>
+

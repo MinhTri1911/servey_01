@@ -17,7 +17,7 @@ return [
     'title' => 'Title',
     'email' => 'Email',
     'do_you_want' => 'Do you want',
-    'public' => 'public',
+    'public' => 'Public',
     'this_survey' => 'this survey',
     'description' => 'Enter a description for this survey',
     'enter_info' => 'Enter your info',
@@ -32,4 +32,5 @@ return [
     'sender_email' => 'Enter email which you want send here...',
     'survey_created' => 'Your survey has been created',
     'link_send' => 'Send this link to anyone you wish to invite',
+    'datetime_format' => 'M d Y',
 ];

@@ -139,8 +139,8 @@ class SurveyRepository extends BaseRepository implements SurveyInterface
 
         //(1,5) That is the settings quantity for a survey
         foreach (range(1, 5) as $key) {
-            if(!array_has($settings, $key)) {
-                $settings[$key] = '';
+            if (!array_has($settings, $key) || !$settings[config('settings.key.tailMail')]) {
+                $settings[$key] = null;
             }
         }
 
@@ -297,12 +297,14 @@ class SurveyRepository extends BaseRepository implements SurveyInterface
         */
         $collection = collect($results)->groupBy('sender_id')->toArray();
         //  Get users login when anwser survey with key = user id.
-        $userLogin = collect($collection)->except([""])->toArray();
+        $userLogin = collect($collection)->except([''])->toArray();
         /*
             Get users not login when answer survey and group by email.
             Email can be set default because user don't need enter email.
         */
-        $userNotLogin = collect($collection[""])->groupBy('email')->toArray();
+        $userNotLogin = in_array('', array_keys($collection))
+            ? collect($collection[''])->groupBy('email')->toArray()
+            : [];
 
         return array_merge($userLogin, $userNotLogin);
     }

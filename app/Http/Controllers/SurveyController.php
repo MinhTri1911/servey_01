@@ -45,27 +45,26 @@ class SurveyController extends Controller
         $ids = array_merge(
             $inviteIds->lists('survey_id')->toArray(),
             $surveyIds->lists('id')->toArray()
-        );
+        ); // đưa 2 cái survey của mình vs survey đcinvite thành mảng các ids
 
-        return $this->settingRepository
+        return $this->settingRepository // kiểm tra trong bảng settings có survey =ids vafkey ==...
             ->whereIn('survey_id', $ids)
             ->where([
                 'key' => config('settings.key.limitAnswer'),
                 'value' => 0,
             ])
-            ->where('value', '<>', '')
             ->lists('survey_id')
             ->toArray();
     }
 
     public function listSurveyUser()
     {
-        $invites = $inviteIds = $this->inviteRepository
+        $invites = $inviteIds = $this->inviteRepository  // tất cả survey được mời o day
             ->where('recevier_id', auth()->id())
             ->orWhere('mail', auth()->user()->email);
         $surveys = $surveyIds = $this->surveyRepository
-            ->where('user_id', auth()->id());
-        $settings = $this->checkCloseSurvey($inviteIds, $surveyIds);
+            ->where('user_id', auth()->id()); // tất cả survey cua minh
+        $settings = $this->checkCloseSurvey($inviteIds, $surveyIds);// kiêm tra survey
         $invites = $invites
             ->orderBy('id', 'desc')
             ->paginate(config('settings.paginate'));
@@ -103,45 +102,18 @@ class SurveyController extends Controller
         return view('user.pages.answer', compact('surveys'));
     }
 
-    // public function updateSurvey(Request $request, $id)
-    // {
-    //     $survey = $this->surveyRepository->find($id);
-    //     $isSuccess = false;
-    //     $data = $request->only([
-    //         'title',
-    //         'description',
-    //     ]);
-    //     $data['deadline'] = Carbon::parse($request->get('deadline'))->format('Y/m/d H:i');
-
-    //     if ($survey) {
-    //         DB::beginTransaction();
-    //         try {
-    //             $isSuccess = $this->surveyRepository->update($id, $data);
-    //             DB::commit();
-    //         } catch (Exception $e) {
-    //             DB::rollback();
-    //         }
-    //     }
-
-    //     return redirect()->action('AnswerController@show', $survey->token_manage)
-    //         ->with(($isSuccess) ? 'message' : 'message-fail', ($isSuccess)
-    //             ? trans('messages.object_updated_successfully', [
-    //                 'object' => class_basename(Survey::class),
-    //             ])
-    //             : trans('messages.object_updated_unsuccessfully', [
-    //                 'object' => class_basename(Survey::class)
-    //             ])
-    //         );
-    // }
-    public function updateInfoSurvey(Request $request, $id)
+    public function updateSurvey(Request $request, $id)
     {
         $survey = $this->surveyRepository->find($id);
         $isSuccess = false;
         $data = $request->only([
             'title',
             'description',
-            'deadline',
         ]);
+
+        if ($request->get('deadline')) {
+            $data['deadline'] = Carbon::parse($request->get('deadline'))->format('Y/m/d H:i');
+        }
 
         if ($survey) {
             DB::beginTransaction();
@@ -153,7 +125,7 @@ class SurveyController extends Controller
             }
         }
 
-        return redirect()->action('AnswerController@show', $survey->token)
+        return redirect()->action('AnswerController@show', $survey->token_manage)
             ->with(($isSuccess) ? 'message' : 'message-fail', ($isSuccess)
                 ? trans('messages.object_updated_successfully', [
                     'object' => class_basename(Survey::class),
@@ -164,7 +136,7 @@ class SurveyController extends Controller
             );
     }
 
-    public function updateSurvey(Request $request, $surveyId)
+    public function updateSurveyContent(Request $request, $surveyId, $token)
     {
         DB::beginTransaction();
         try {
@@ -173,17 +145,23 @@ class SurveyController extends Controller
                 'checkboxRequired',
                 'required-question',
                 'image',
+                'del-question',
+                'del-answer',
+                'del-question-image',
+                'del-answer-image',
             ]);
-
-            $x = $this->questionRepository->updateSurvey($inputs, $request->get('survey-info'));
-
+            $this->questionRepository->updateSurvey($inputs, $surveyId);
             DB::commit();
 
-            return $x;
+            return redirect()->action('AnswerController@show', $token)->with('message', trans('messages.object_updated_successfully', [
+                'object' => class_basename(Survey::class)
+            ]));
         } catch (Exception $e) {
             DB::rollback();
 
-            throw $e;
+            return redirect()->action('AnswerController@show', $token)->with('message-fail', trans('messages.object_updated_unsuccessfully', [
+                'object' => class_basename(Survey::class)
+            ]));
         }
     }
 

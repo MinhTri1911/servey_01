@@ -28,7 +28,8 @@ return [
     'save' => 'Lưu',
     'sender' => 'Người gửi',
     'information' => 'Thông tin',
-    'closed_or_private' => 'Survey này đã đóng hoặc hết thời hạn trả lời',
+    'closed' => 'Survey này đã đóng',
+    'link' => 'Link',
     'index' => 'Stt',
     'answerIndex' => 'Stt',
     'quantity' => 'Số người trả lời',
@@ -40,6 +41,8 @@ return [
         'choose_option' => 'Vui lòng chọn một yêu cầu',
         'validate_number' => 'Vui lòng nhập vào ô một con số lớn hơn một',
         'tailmail' => 'Vui lòng nhập loại email',
+        'run_out' => 'Bạn đã hết lượt trả lời.',
+        'invalid_mail' => 'Đuôi mail không hợp lệ.',
     ],
     'specific_result' => 'Kết quả cụ thể',
     'require' => [
@@ -51,6 +54,12 @@ return [
     'placeholder' => [
         'example' => 'Ví dụ: @gmail.com,....',
         'none' => '',
+    ],
+    'label' => [
+        'require_email' => '*Yêu cầu nhập email',
+        'require_name' => '*Yêu cầu nhập tên',
+        'require_both' => '*Yêu cầu nhập tên và email',
+        'require_tailmail' => 'với đuôi mail:',
     ],
     'question_type' => 'Loại câu hỏi',
     'title_web' => 'Fsurvey',

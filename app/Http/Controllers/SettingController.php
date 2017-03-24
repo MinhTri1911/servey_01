@@ -25,7 +25,7 @@ class SettingController extends Controller
     {
         $value = $request->only([
             'setting',
-            'feature'
+            'feature',
         ]);
 
         DB::beginTransaction();

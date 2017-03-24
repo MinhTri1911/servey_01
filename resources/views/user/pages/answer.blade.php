@@ -1,6 +1,6 @@
 @extends('user.master')
 @section('content')
-    <div id="survey_container" class="survey_container animated zoomIn wizard" novalidate="novalidate">
+    <div class="survey_container animated zoomIn wizard" novalidate="novalidate">
         <div id="top-wizard">
             <div class="container-menu-wizard row">
                 @if (!in_array(config('settings.key.hideResult'), array_keys($access)) || ($survey->user_id == auth()->id()))
@@ -27,7 +27,7 @@
                 'action' => ['ResultController@result', $survey->token],
                 'method' => 'POST',
             ]) !!}
-                <div id="middle-wizard" class="wizard-branch wizard-wrapper">
+                <div class="container-answer wizard-branch wizard-wrapper">
                     <div class="get-title-survey">
                         {{ $survey->title }}
                     </div>
@@ -54,9 +54,17 @@
                 </div>
                 <div class="required-user">
                     <div class="row" >
-                        @if (in_array(config('settings.key.requireAnswer'), array_keys($access)))
+                        @if (in_array(config('settings.key.requireAnswer'), array_keys($access))
+                            && $access[config('settings.key.requireAnswer')]
+                        )
                             @switch($access[config('settings.key.requireAnswer')])
                                 @case(config('settings.require.email'))
+                                    <div class="div-require-info">
+                                        {{ trans('survey.label.require_email') }}
+                                        @if ($access[config('settings.key.tailMail')])
+                                            ({{ trans('survey.label.require_tailmail') . $access[config('settings.key.tailMail')] }})
+                                        @endif
+                                    </div>
                                     <div class="col-md-5 col-md-offset-1">
                                         <div class="container-infor">
                                             {!! Html::image(config('settings.image_system') . 'email1.png', '') !!}
@@ -74,6 +82,9 @@
                                     </div>
                                     @breakswitch
                                 @case(config('settings.require.name'))
+                                    <div class="div-require-info">
+                                        {{ trans('survey.label.require_name') }}
+                                    </div>
                                     <div class="col-md-5 col-md-offset-1">
                                         <div class="container-infor">
                                             {!! Html::image(config('settings.image_system') . 'name.png', '') !!}
@@ -91,6 +102,12 @@
                                     </div>
                                     @breakswitch
                                 @default
+                                    <div class="div-require-info">
+                                        {{ trans('survey.label.require_both') }}
+                                        @if ($access[config('settings.key.tailMail')])
+                                            ({{ trans('survey.label.require_tailmail') . $access[config('settings.key.tailMail')] }})
+                                        @endif
+                                    </div>
                                     <div class="col-md-5 col-md-offset-1">
                                         <div class="container-infor">
                                             {!! Html::image(config('settings.image_system') . 'email1.png', '') !!}
@@ -125,10 +142,20 @@
                             @endswitch
                         @endif
                     </div>
+                    @if (Session::has('message-validate-tailmail'))
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-1">
+                                <div class="alert alert-danger alert-message">
+                                    {{ Session::get('message-validate-tailmail') }}
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div id="bottom-wizard">
                 <?php $inArray = in_array(config('settings.key.limitAnswer'), array_keys($access));
-                    $check = (($inArray && $access[config('settings.key.limitAnswer')]) || !$inArray); ?>
+                    $check = ($inArray && ($access[config('settings.key.limitAnswer')]
+                    || !$access[config('settings.key.limitAnswer')])); ?>
                     @if ($survey->status
                         && (Carbon\Carbon::parse($survey->deadline)->gt(Carbon\Carbon::now()) || empty($survey->deadline))
                         && $check)

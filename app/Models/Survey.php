@@ -30,7 +30,7 @@ class Survey extends Model
 
     public function questions()
     {
-        return $this->hasMany(Question::class)->orderby('sequence');
+        return $this->hasMany(Question::class)->orderBy('sequence');
     }
 
     public function likes()
@@ -46,7 +46,7 @@ class Survey extends Model
     public function getDeadlineAttribute()
     {
         return (!empty($this->attributes['deadline']))
-            ? Carbon::parse($this->attributes['deadline'])->format('Y/m/d H:i')
+            ? Carbon::parse($this->attributes['deadline'])->format('Y-m-d H:i:s')
             : null;
     }
 

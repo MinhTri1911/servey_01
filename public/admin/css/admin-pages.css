@@ -1,0 +1,30 @@
+.popup-container {
+  position: absolute;
+  background-color: #c3e5d8;
+}
+
+.table-popup {
+  background-color: #c3e5d8;
+}
+
+.popup-delete {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 1000px;
+  border: 1px solid #d0dbe5;
+  margin: 30px 100px 400px 0px;
+  border-radius: 10px;
+}
+
+.popup-table td:nth-child(1) {
+  width: 140px;
+  padding-left: 15px;
+}
+
+.bt-send-request:hover {
+  background: #c2d8ef;
+}
+
+/*# sourceMappingURL=admin-pages.css.map */

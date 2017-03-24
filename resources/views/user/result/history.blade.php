@@ -1,5 +1,5 @@
 <div class="container-list-answer1">
-    <div id="middle-wizard" class="wizard-branch wizard-wrapper">
+    <div class="div-show-result wizard-branch wizard-wrapper">
         <div class="get-title-survey">
             {{ $survey->title }}
         </div>
@@ -12,7 +12,7 @@
             @foreach ($survey->questions as $key => $question)
                 <div>
                     <h4 class="tag-question">
-                        {{ ++$key . $question->content }}
+                        {{ ($key + 1) . '. ' . $question->content }}
                         <span>{{ ($question->required) ? '(*)' : '' }}</span>
                     </h4>
                     @if ($question->image)
@@ -111,7 +111,7 @@
                             @if ($answer->image)
                                 <li>
                                     {!! Html::image($answer->image, '', [
-                                        'class' => 'set-image image-question',
+                                        'class' => 'show-img-answer',
                                     ]) !!}
                                 </li>
                             @endif

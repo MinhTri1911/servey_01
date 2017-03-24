@@ -136,6 +136,12 @@ class AnswerController extends Controller
 
     public function showMultiHistory(Request $request, $surveyId, $userId = null, $email = null)
     {
+        if (!$request->ajax()) {
+            return [
+                'success' => false,
+            ];
+        }
+
         $survey = $this->surveyRepository->find($surveyId);
 
         if (!$survey) {
@@ -152,6 +158,9 @@ class AnswerController extends Controller
 
         $history  = $this->surveyRepository->getHistory($userId, $surveyId, $options);
 
-        return view('user.pages.view-result-user', compact('history', 'survey'));
+        return [
+            'success' => true,
+            'data' => view('user.pages.view-result-user', compact('history', 'survey'))->render(),
+        ];
     }
 }

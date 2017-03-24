@@ -51,4 +51,5 @@ return [
     'description_complete' => 'Dưới đây là 2 link đã được gữi đến',
     'save' => 'Lưu survey',
     'load' => 'Tải lại',
+    'survey_closed' => 'Survey đã đóng',
 ];

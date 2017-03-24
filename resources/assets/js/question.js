@@ -192,6 +192,37 @@ $(document).ready(function() {
 
     });
 
+    $(document).on('click', '.btn-change-survey', function() {
+        $('input[name=del-question]').val(arrayQuestion);
+        $('input[name=del-answer]').val(arrayAnswer);
+        $('input[name=del-question-image]').val(arrayImageQuestion);
+        $('input[name=del-answer-image]').val(arrayImageAnswer);
+
+        // return false;
+    });
+
+    $(document).on('click', '.show-multi-history', function() {
+        var url = $(this).attr('data-url');
+        $.get(
+            url,
+            function(response) {
+
+                if (response.success) {
+                    $('body').css('overflow', 'hidden');
+                    $('.popup-user-answer').css('display', 'block');
+                    $('.popup-content-history').append(response.data);
+                } else {
+                    alert(error);
+                }
+        });
+    });
+
+    $(document).on('click', '.hidden-result', function() {
+        $('body').css('overflow', 'auto');
+        $('.popup-user-answer').css('display', 'none');
+        $('.popup-content-history').empty();
+    });
+
     $(document).on('click', '.picture-answer', function() {
         var idAnswer = $(this).siblings('.glyphicon-remove').attr('id-as');
         $('.fileImgAnswer' + idAnswer).click();

@@ -1,0 +1,1 @@
+{"version":3,"sources":["user.js"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"user.js","sourcesContent":["$(document).ready(function () {\r\n    var url = $('.url-token').data('route');\r\n\r\n    $(document).on('click', '#bt-delete', function () {\r\n\r\n        $( \"#test\" ).toggle( 'slow' );\r\n    });\r\n});"]}

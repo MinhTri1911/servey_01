@@ -97,7 +97,7 @@
                                                         @include('user.result.chart')
                                                     </div>
                                                     <div class="tab-pane" id="profile-v">
-                                                        @include('user.result.over-view')
+                                                        @include('user.result.detail-result')
                                                     </div>
                                                     <div class="tab-pane" id="messages-v">
                                                         @include('user.result.users-answer')
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
                             <div class="content-4 div-hidden">
-                                @include('user.update-survey.update-survey')
+                                @include('user.component.tab-update-survey')
                             </div>
                         </div>
                     </section>

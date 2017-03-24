@@ -213,6 +213,58 @@ $(document).ready(function() {
         }
     });
 
+    // $(document).on('click', '.btn-change-survey', function() {
+    //     var _temp = $('.update-content-survey').find('input[type="text"]');
+    //     return (!_temp['length'] || !!_temp['valid']())
+    // });
+
+    // $('.btn-change-survey').submit(function() {
+    //     $(document).on('click', '.btn-change-survey', function() {
+    // // get all the inputs into an array.
+    //     var $inputs = $('.update-content-survey').find('input');
+
+    //     // not sure if you wanted this, but I thought I'd add it.
+    //     // get an associative array of just the values.
+    //     var values = {};
+    //     $inputs.each(function() {
+    //         values[this.name] = $(this).val();
+    //     });
+    //     alert($inputs);alert('ad');
+    //     return false;
+    // });
+
+    // $('#wrapped-update').submit(function() {
+    // // get all the inputs into an array.
+    //     var $inputs = $('#wrapped-update :input');
+
+    //     // not sure if you wanted this, but I thought I'd add it.
+    //     // get an associative array of just the values.
+    //     var values = {};
+    //     $inputs.each(function() {
+    //         values[this.name] = $(this).val();
+    //     });
+    //     alert(values);alert('adsa');
+    //     return false;
+    // });
+
+     $('#wrapped-update').submit(function() {
+       // var values = {};
+       //  $.each($('#myForm').serializeArray(), function(i, field) {
+       //      values[field.name] cz= field.value;
+       //  });
+       var values = $(this).serializeArray();
+        if(values.length == 5) {
+            alert('survey phai co it nhat 1 cau hoi');
+           return false;
+        }
+
+        var _temp = $('.update-content-survey').find('input[type="text"]');
+
+        return (!_temp['length'] || !!_temp['valid']())
+    });
+
+
+
     $(document).on('change', '.option-choose-answer', function() {
         if ($(this).val() == 1 || $(this).val() == 3) {
             $('.div-option-require').slideDown();

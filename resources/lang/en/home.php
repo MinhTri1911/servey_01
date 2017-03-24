@@ -51,4 +51,6 @@ return [
     'description_complete' => 'Here are 2 links that have been submitted',
     'save' => 'Save survey',
     'load' => 'Reload',
+    'link' => 'link',
+    'survey_closed' => 'Survey closed',
 ];
