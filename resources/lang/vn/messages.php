@@ -34,4 +34,5 @@ return [
     'block' => 'Tài khoản này đã bị khóa',
     'login_social_error' => 'Lỗi khi đăng nhập với facebook, vui lòng thử lại',
     'not_have_results' => 'Không có dữ liệu',
+    'paginate_fail' => 'Lỗi khi tải trang này.',
 ];

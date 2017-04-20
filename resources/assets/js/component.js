@@ -308,4 +308,29 @@ $(document).ready(function() {
         $(this).children().removeClass('glyphicon-eye-close');
         $(this).children().addClass('glyphicon-eye-open');
     });
+
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        var id = $('.tab-pane.active').attr('id');
+        var url = $(this).attr('href');
+        getAjax(id, url, page);
+    });
+
+    function getAjax(id, url, page) {
+        $.get(
+            url,
+            {
+                viewId: id,
+            },
+            function(response) {
+                if (response.success) {
+                    $('#' + id).html(response.view);
+                    location.hash = page;
+                } else {
+                    location.href = url.split('?page=')[0];
+                    alert(response.messageFail);
+                }
+        });
+    }
 });

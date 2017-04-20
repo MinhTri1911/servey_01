@@ -120,7 +120,6 @@ Route::group(['prefix' => '/home'], function () {
 
         Route::get('/show-temp', 'User\SaveTempController@show');
     });
-
 });
 
 Route::get('/survey/detail/{token}', 'AnswerController@show');

@@ -34,4 +34,5 @@ return [
     'block' => 'This account is not available',
     'login_social_error' => 'Error with login :object, please try again',
     'not_have_results' => 'This page is empty',
+    'paginate_fail' => 'Fail to load this page.',
 ];

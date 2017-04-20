@@ -59,7 +59,7 @@ class SurveyController extends Controller
             ->toArray();
     }
 
-    public function listSurveyUser()
+    public function listSurveyUser(Request $request)
     {
         $invites = $inviteIds = $this->inviteRepository
             ->where('recevier_id', auth()->id())
@@ -73,6 +73,27 @@ class SurveyController extends Controller
         $surveys = $surveys
             ->orderBy('id', 'desc')
             ->paginate(config('settings.paginate'));
+
+        if ($request->ajax()) {
+            try {
+                $viewId = $request->get('viewId');
+                if ($viewId == 'profile-v') {
+                    $view = view('user.pages.list-invited', compact('invites', 'settings'))->render();
+                } elseif ($viewId == 'home-v') {
+                    $view = view('user.pages.surveys_tab', compact('surveys', 'settings'))->render();
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'view' => $view,
+                ]);
+            } catch (Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'messageFail' => trans('messages.paginate_fail'),
+                ]);
+            }
+        }
 
         return view('user.pages.list-survey', compact('surveys', 'invites', 'settings'));
     }

@@ -68,5 +68,5 @@
             </div>
         @endforelse
     </table>
-        {{ $invites->render() }}
+        {{ $invites->links() }}
 </div>
