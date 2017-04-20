@@ -77,10 +77,19 @@ class SurveyController extends Controller
         if ($request->ajax()) {
             try {
                 $viewId = $request->get('viewId');
+                $view = null;
+                
                 if ($viewId == 'profile-v') {
                     $view = view('user.pages.list-invited', compact('invites', 'settings'))->render();
                 } elseif ($viewId == 'home-v') {
                     $view = view('user.pages.surveys_tab', compact('surveys', 'settings'))->render();
+                }
+                
+                if (!$view) {
+                    return response()->json([
+                        'success' => false,
+                        'messageFail' => trans('messages.paginate_fail'),
+                    ]);
                 }
 
                 return response()->json([
