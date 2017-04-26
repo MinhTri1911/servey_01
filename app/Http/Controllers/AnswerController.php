@@ -25,7 +25,7 @@ class AnswerController extends Controller
         $this->settingRepository = $settingRepository;
     }
 
-    public function answer($token, $view = 'detail', $isPublic = true)
+    public function answer($token, $view = 'detail', $isPublic = true, $isAjax = false)
     {
         $survey = $this->surveyRepository
             ->where(($view == 'detail') ? 'token_manage' : 'token', $token)
@@ -60,6 +60,12 @@ class AnswerController extends Controller
 
         if ($survey) {
             if ($survey->user_id == auth()->id() || $check) {
+                if ($isAjax) {
+                    $tempAnswers = false;
+
+                    return view('user.component.temp-answer', compact('survey', 'tempAnswers'))->render();
+                }
+
                 $results = $history['results'];
                 $history = $history['history'];
                 $tempAnswers = ($results && !$results->isEmpty()) ? $results : null;
@@ -83,13 +89,29 @@ class AnswerController extends Controller
             ->with('message-fail', trans_choice('messages.permisstion', ($view == 'detail') ? 0 : 1));
     }
 
-    public function answerPublic($token)
+    public function answerPublic(Request $request, $token)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'view' => $this->answer($token, 'answer', true, true),
+                'type' => true,
+            ]);
+        }
+
         return $this->answer($token, 'answer', true);
     }
 
-    public function answerPrivate($token)
+    public function answerPrivate(Request $request, $token)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'view' => $this->answer($token, 'answer', false, true),
+                'type' => true,
+            ]);
+        }
+
         return $this->answer($token, 'answer', false);
     }
 

@@ -390,9 +390,16 @@ $(document).ready(function() {
 
     $(document).on('click', '.pagination a', function(e) {
         e.preventDefault();
+
         var page = $(this).attr('href').split('page=')[1];
         var id = $('.tab-pane.active').attr('id');
         var url = $(this).attr('href');
+
+        if ($('#container-survey').attr('data-url')) {
+            var id = $('.container-survey').attr('id');
+            url = $(this).attr('href');
+        }
+
         getAjax(id, url, page);
     });
 
@@ -404,8 +411,13 @@ $(document).ready(function() {
             },
             function(response) {
                 if (response.success) {
-                    $('#' + id).html(response.view);
-                    location.hash = page;
+                    if (response.type) {
+                        $('#container-survey').html(response.view);
+                        location.hash = page;
+                    } else {
+                        $('#' + id).html(response.view);
+                        location.hash = page;
+                    }
                 } else {
                     location.href = url.split('?page=')[0];
                     alert(response.messageFail);

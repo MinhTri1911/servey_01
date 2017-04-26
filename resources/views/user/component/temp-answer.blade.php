@@ -1,8 +1,9 @@
 @php
     $maxUpdateQuestion = $survey->questions->max('update');
     $indexShow = 0;
+    $surveyAll = $survey->questions()->simplePaginate(config('settings.paginate'));
 @endphp
-@foreach($survey->questions as $key => $question)
+@foreach($surveyAll as $key => $question)
     @if ($question->update >= 0)
         <div>
             <h4 class="tag-question">
@@ -183,3 +184,4 @@
         </div>
     @endif
 @endforeach
+{!! $surveyAll->links() !!}

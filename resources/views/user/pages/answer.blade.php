@@ -76,8 +76,8 @@
                         </div>
                     @endif
                     <div class="container-all-question step row wizard-step ">
-                       <div class="container-survey" id="container-survey">
-                           @include('user.component.temp-answer')
+                       <div class="container-survey" id="container-survey" data-url="{{ Request::url() }}">
+                            @include('user.component.temp-answer')
                        </div>
                     </div>
                 </div>
